@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="666.0" prefHeight="19.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.desktopantivirus.MiniFileController">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="666.0" prefHeight="19.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.desktopantivirus.MiniFileController">
    <children>
-      <Text fx:id="txtFile" fill="WHITE" layoutX="23.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File name" wrappingWidth="666.0" />
+      <Text fx:id="txtFile" fill="WHITE" layoutX="23.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File name" wrappingWidth="186.0" />
       <ImageView fx:id="imageviewFile" fitHeight="19.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fx:id="txtPath" fill="WHITE" layoutX="209.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="460.5366668701172" />
    </children>
 </AnchorPane>
