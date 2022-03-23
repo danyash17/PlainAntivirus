@@ -10,12 +10,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -48,14 +46,21 @@ public class PrimalController implements Initializable {
         }
     }
 
-    private void scanDirectory() {
+    private void doScan(File dir) {
         files = new LinkedList<>();
-        for (File file : directory.listFiles()) {
+        scan(dir);
+        showFiles(files);
+    }
+
+    private void scan(File dir){
+        for (File file : dir.listFiles()) {
             if(!file.isDirectory() && isExecutable(file)){
                 files.add(file);
             }
+            if (file.isDirectory()){
+                scan(file);
+            }
         }
-        showFiles(files);
     }
 
     private void showFiles(List<File> files) {
@@ -92,6 +97,7 @@ public class PrimalController implements Initializable {
         imageviewFolder.setImage(new Image(getClass().getResourceAsStream("pics/closed-folder.png")));
         imageviewFolder.setPickOnBounds(true);
         imageviewFolder.setOnMouseClicked(e -> chooseDirectory());
-        btnScan.setOnMouseClicked(e -> scanDirectory());
+        btnScan.setOnMouseClicked(e -> doScan(directory));
+        btnScan.getStyleClass().add("btnScan");
     }
 }
