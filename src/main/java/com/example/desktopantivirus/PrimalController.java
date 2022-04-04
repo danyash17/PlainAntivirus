@@ -12,9 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -29,6 +27,7 @@ public class PrimalController implements Initializable {
     public ImageView imageviewFolder;
 
     private static final int MAX_TXT_LENGTH = 68;
+    private static final long PE_OFFSET = 0x3c;
     private File directory;
     private List<File> files;
 
@@ -52,12 +51,12 @@ public class PrimalController implements Initializable {
         showFiles(files);
     }
 
-    private void scan(File dir){
+    private void scan(File dir) {
         for (File file : dir.listFiles()) {
-            if(!file.isDirectory() && isExecutable(file)){
+            if (!file.isDirectory() && isPe(file)) {
                 files.add(file);
             }
-            if (file.isDirectory()){
+            if (file.isDirectory()) {
                 scan(file);
             }
         }
@@ -65,7 +64,7 @@ public class PrimalController implements Initializable {
 
     private void showFiles(List<File> files) {
         grid.getChildren().clear();
-        for (int i =0;i<files.size();i++) {
+        for (int i = 0; i < files.size(); i++) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("file.fxml"));
             AnchorPane anchorPane = null;
@@ -74,22 +73,31 @@ public class PrimalController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            MiniFileController imageController = fxmlLoader.getController();
-            imageController.setData(files.get(i));
+            MiniFileController miniFileController = fxmlLoader.getController();
+            miniFileController.setData(files.get(i));
             grid.add(anchorPane, 0, i);
         }
     }
 
-    private boolean isExecutable(File file){
-        byte[] firstBytes = new byte[2];
+    private boolean isPe(File file) {
+        byte[] bytes = new byte[2];
+        boolean isPe = false;
         try {
-            FileInputStream input = new FileInputStream(file);
-            input.read(firstBytes);
-        }
-        catch (Exception e) {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            randomAccessFile.read(bytes);
+            if (bytes[0] == 0x4d && bytes[1] == 0x5a) {
+                //pe header address
+                randomAccessFile.seek(PE_OFFSET);
+                randomAccessFile.read(bytes);
+                //pe
+                randomAccessFile.seek(0x100 + bytes[0]);
+                randomAccessFile.read(bytes);
+                isPe = bytes[0] == 0x50 && bytes[1] == 0x45;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return firstBytes[0] == 0x4d && firstBytes[1] == 0x5a;
+        return isPe;
     }
 
     @Override
