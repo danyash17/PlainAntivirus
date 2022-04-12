@@ -3,6 +3,8 @@ package com.example.desktopantivirus;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,16 +22,39 @@ public class PrimalController implements Initializable {
     @FXML
     public GridPane grid;
     @FXML
-    public Button btnScan;
-    @FXML
     public Text txtDirectory;
     @FXML
     public ImageView imageviewFolder;
-
+    @FXML
+    public Button btnFindPe;
+    @FXML
+    public Button btnManage;
+    @FXML
+    public Button btnVirusScan;
     private static final int MAX_TXT_LENGTH = 68;
     private static final long PE_OFFSET = 0x3c;
+
+
     private File directory;
     private List<File> files;
+
+    public void manage() {
+        Stage window = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("manager.fxml"));
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteManagerController imageController = fxmlLoader.getController();
+        window.getIcons().add(new Image(getClass().getResourceAsStream("pics/antivirus.png")));
+        window.setTitle("Byte manager");
+        window.setScene(new Scene(root, 824, 554));
+        window.show();
+        window.setResizable(false);
+    }
 
     private void chooseDirectory() {
         DirectoryChooser chooser = new DirectoryChooser();
@@ -47,17 +72,17 @@ public class PrimalController implements Initializable {
 
     private void doScan(File dir) {
         files = new LinkedList<>();
-        scan(dir);
+        recursiveScan(dir);
         showFiles(files);
     }
 
-    private void scan(File dir) {
+    private void recursiveScan(File dir) {
         for (File file : dir.listFiles()) {
             if (!file.isDirectory() && isPe(file)) {
                 files.add(file);
             }
             if (file.isDirectory()) {
-                scan(file);
+                recursiveScan(file);
             }
         }
     }
@@ -105,7 +130,7 @@ public class PrimalController implements Initializable {
         imageviewFolder.setImage(new Image(getClass().getResourceAsStream("pics/closed-folder.png")));
         imageviewFolder.setPickOnBounds(true);
         imageviewFolder.setOnMouseClicked(e -> chooseDirectory());
-        btnScan.setOnMouseClicked(e -> doScan(directory));
-        btnScan.getStyleClass().add("btnScan");
+        btnFindPe.setOnMouseClicked(e -> doScan(directory));
+        btnManage.setOnMouseClicked(e -> manage());
     }
 }

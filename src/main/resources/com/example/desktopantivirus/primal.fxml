@@ -22,7 +22,9 @@
       </ScrollPane>
       <AnchorPane layoutX="14.0" layoutY="80.0" prefHeight="460.0" prefWidth="118.0" style="-fx-background-color: #89253e;">
          <children>
-            <Button fx:id="btnScan" layoutX="17.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="SCAN" />
+            <Button fx:id="btnFindPe" layoutX="17.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="FIND PE" />
+            <Button fx:id="btnManage" layoutX="17.0" layoutY="74.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="MANAGE" />
+            <Button fx:id="btnVirusScan" layoutX="5.0" layoutY="384.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="107.0" style="-fx-text-fill: white; -fx-background-color: #3a6186;" text="VIRUS SCAN" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="15.0" layoutY="32.0" prefHeight="48.0" prefWidth="794.0">
