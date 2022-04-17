@@ -39,5 +39,13 @@ public class MiniByteSequenceController implements Initializable {
     public void setCheckBox(CheckBox checkBox) {
         this.checkBox = checkBox;
     }
+
+    public Text getTxtByteSequence() {
+        return txtByteSequence;
+    }
+
+    public void setTxtByteSequence(Text txtByteSequence) {
+        this.txtByteSequence = txtByteSequence;
+    }
 }
 

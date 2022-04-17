@@ -2,13 +2,13 @@ package com.example.desktopantivirus;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -17,7 +17,8 @@ public class VirusWindowController implements Initializable {
     public ImageView imageviewVirus;
     public Text txtFile;
     public GridPane gridVirus;
-    private Map<List<Byte>, CheckBox> managedBytesMap = new HashMap<>();
+    private Map<File, List<List<Byte>>> virusScanResults = new HashMap<>();
+    private File file;
     private static final int MAX_TXT_LENGTH = 100;
 
     private static int rowId = 0;
@@ -28,12 +29,20 @@ public class VirusWindowController implements Initializable {
     }
 
     public void populateViruses(){
-        for (Map.Entry<List<Byte>, CheckBox> entry : managedBytesMap.entrySet()) {
-            showSequence(entry.getKey());
+        for (Map.Entry<File, List<List<Byte>>> entry : virusScanResults.entrySet()) {
+            if(entry.getKey().equals(file)) {
+                showAllSequences(entry.getValue());
+            }
         }
     }
 
-    public void showSequence(List<Byte> sequence) {
+    public void showAllSequences(List<List<Byte>> sequences) {
+        for (List<Byte> byteList: sequences){
+            showSequence(byteList);
+        }
+    }
+
+    private void showSequence(List<Byte> sequence){
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("sequence.fxml"));
         AnchorPane anchorPane = null;
@@ -44,7 +53,7 @@ public class VirusWindowController implements Initializable {
         }
         MiniByteSequenceController miniByteSequenceController = fxmlLoader.getController();
         String str = parseListByteToString(sequence);
-        miniByteSequenceController.setData(str, sequence, managedBytesMap);
+        miniByteSequenceController.getTxtByteSequence().setText(str);
         miniByteSequenceController.setCheckBox(null);
         if (str.length() / MAX_TXT_LENGTH > 0) {
             anchorPane.setPrefHeight(anchorPane.getPrefHeight() * str.length() / MAX_TXT_LENGTH);
@@ -72,11 +81,19 @@ public class VirusWindowController implements Initializable {
         this.gridVirus = gridVirus;
     }
 
-    public Map<List<Byte>, CheckBox> getManagedBytesMap() {
-        return managedBytesMap;
+    public Map<File, List<List<Byte>>> getVirusScanResults() {
+        return virusScanResults;
     }
 
-    public void setManagedBytesMap(Map<List<Byte>, CheckBox> managedBytesMap) {
-        this.managedBytesMap = managedBytesMap;
+    public void setVirusScanResults(Map<File, List<List<Byte>>> virusScanResults) {
+        this.virusScanResults = virusScanResults;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }

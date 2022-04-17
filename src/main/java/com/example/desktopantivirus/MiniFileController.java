@@ -60,7 +60,7 @@ public class MiniFileController implements Initializable {
         int length = value.length();
         if (length > MAX_TXT_LENGTH) {
             int nearestSlashIndex = value.substring(length - MAX_TXT_LENGTH, MAX_TXT_LENGTH).indexOf('\\');
-            text.setText(".." + value.substring(length - MAX_TXT_LENGTH + nearestSlashIndex, length));
+            text.setText(".." + value.substring(length - MAX_TXT_LENGTH + nearestSlashIndex, MAX_TXT_LENGTH));
         } else {
             text.setText(value);
         }

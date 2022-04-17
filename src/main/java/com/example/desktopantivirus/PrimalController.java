@@ -1,21 +1,22 @@
 package com.example.desktopantivirus;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -26,7 +27,7 @@ import java.util.stream.IntStream;
 
 public class PrimalController implements Initializable {
     @FXML
-    public GridPane grid;
+    public GridPane gridFile;
     @FXML
     public Text txtDirectory;
     @FXML
@@ -41,13 +42,27 @@ public class PrimalController implements Initializable {
     public GridPane gridByte;
     @FXML
     public Button btnClear;
+    @FXML
+    public RadioButton radioCustom;
+    @FXML
+    public RadioButton radioAllFiles;
+    @FXML
+    public RadioButton radioAllBytes;
+    @FXML
+    public ScrollPane gridByteScrollpane;
+    @FXML
+    public ScrollPane gridFileScrollpane;
+    @FXML
+    public Button btnErase;
 
     private static final int MAX_TXT_LENGTH = 68;
     private static final long PE_OFFSET = 0x3c;
     private static int rowId = 0;
 
+
+
     private List<List<Byte>> maliciousBytes = new LinkedList<>();
-    private Map<List<Byte>, CheckBox> maliciousBytesMap = new HashMap<>();
+    private Map<List<Byte>, CheckBox> maliciousBytesViewMap = new HashMap<>();
     private Map<File, List<List<Byte>>> virusScanResults = new HashMap<>();
     private File directory;
     private List<File> files;
@@ -100,7 +115,7 @@ public class PrimalController implements Initializable {
     }
 
     private void showDetectedViruses(List<Integer> indexes) {
-        grid.getChildren().clear();
+        gridFile.getChildren().clear();
         for (int i = 0; i < files.size(); i++) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("template.fxml"));
@@ -116,13 +131,21 @@ public class PrimalController implements Initializable {
                 miniFileController.getPane().setStyle("-fx-background-color: RED;");
                 miniFileController.getImageviewFile().setImage(new Image(getClass().getResourceAsStream("pics/virus.png")));
                 miniFileController.getTxtFile().setOnMouseClicked(this::openVirusWindow);
+                miniFileController.getPane().setOnMouseClicked(null);
             }
-            grid.add(anchorPane, 0, i);
+            gridFile.add(anchorPane, 0, i);
         }
     }
 
     private void openVirusWindow(Event event) {
-        String text = ((Text)event.getSource()).getText();
+        String text = ((Text) event.getSource()).getText();
+        File file = null;
+        for (File fileIter:files) {
+            if(fileIter.getName().equals(text)){
+                file = fileIter;
+                break;
+            }
+        }
         Stage window = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("virus.fxml"));
@@ -134,7 +157,8 @@ public class PrimalController implements Initializable {
         }
         VirusWindowController virusWindowController = fxmlLoader.getController();
         virusWindowController.getTxtFile().setText(text);
-        virusWindowController.setManagedBytesMap(maliciousBytesMap);
+        virusWindowController.setVirusScanResults(virusScanResults);
+        virusWindowController.setFile(file);
         virusWindowController.populateViruses();
         window.getIcons().add(new Image(getClass().getResourceAsStream("pics/antivirus.png")));
         window.setTitle("Virus Window");
@@ -152,7 +176,7 @@ public class PrimalController implements Initializable {
             fl.read(arr);
             Byte[] byteObject = ArrayUtils.toObject(arr);
             List<Byte> fileBytes = new ArrayList<>(List.of(byteObject));
-            for (Map.Entry<List<Byte>, CheckBox> entry : maliciousBytesMap.entrySet()) {
+            for (Map.Entry<List<Byte>, CheckBox> entry : maliciousBytesViewMap.entrySet()) {
                 if (hasByteSequence(fileBytes, entry.getKey())) {
                     detectedViruses.add(entry.getKey());
                 }
@@ -207,7 +231,7 @@ public class PrimalController implements Initializable {
     }
 
     private void showFiles(List<File> files) {
-        grid.getChildren().clear();
+        gridFile.getChildren().clear();
         for (int i = 0; i < files.size(); i++) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("template.fxml"));
@@ -219,7 +243,7 @@ public class PrimalController implements Initializable {
             }
             MiniFileController miniFileController = fxmlLoader.getController();
             miniFileController.setData(files.get(i), filesMap);
-            grid.add(anchorPane, 0, i);
+            gridFile.add(anchorPane, 0, i);
         }
     }
 
@@ -253,16 +277,44 @@ public class PrimalController implements Initializable {
         btnManage.setOnAction(e -> manage());
         btnVirusScan.setOnAction(e -> scanViruses());
         btnClear.setOnAction(e -> clear());
+        btnErase.setOnAction(e -> eraseScan());
+        ToggleGroup toggleGroup = new ToggleGroup();
+        radioCustom.setToggleGroup(toggleGroup);
+        radioAllFiles.setToggleGroup(toggleGroup);
+        radioAllBytes.setToggleGroup(toggleGroup);
+        radioCustom.setSelected(true);
+        radioAllFiles.setOnAction(e -> selectAllFiles());
+        radioAllBytes.setOnAction(e -> selectAllBytes());
+        increaseScrollPaneSpeed(gridByteScrollpane);
+        increaseScrollPaneSpeed(gridFileScrollpane);
+    }
+
+    private void eraseScan() {
+        gridFile.getChildren().clear();
+        showFiles(files);
+    }
+
+    private void selectAllFiles() {
+        for (Map.Entry<File, CheckBox> entry : filesMap.entrySet()) {
+            entry.getValue().setSelected(true);
+        }
+    }
+
+    private void selectAllBytes() {
+        for (Map.Entry<List<Byte>, CheckBox> entry : maliciousBytesViewMap.entrySet()) {
+            entry.getValue().setSelected(true);
+        }
     }
 
     private void clear() {
-        grid.getChildren().clear();
+        gridFile.getChildren().clear();
         gridByte.getChildren().clear();
         txtDirectory.setText("Directory not set");
+        imageviewFolder.setImage(new Image(getClass().getResourceAsStream("pics/closed-folder.png")));
         files = null;
         directory = null;
         maliciousBytes = new LinkedList<>();
-        maliciousBytesMap = new HashMap<>();
+        maliciousBytesViewMap = new HashMap<>();
         virusScanResults = new HashMap<>();
     }
 
@@ -283,10 +335,55 @@ public class PrimalController implements Initializable {
         }
         MiniByteSequenceController miniByteSequenceController = fxmlLoader.getController();
         String str = Arrays.deepToString(maliciousBytes.toArray());
-        miniByteSequenceController.setData(str, maliciousBytes, maliciousBytesMap);
+        miniByteSequenceController.setData(str, maliciousBytes, maliciousBytesViewMap);
         if (str.length() / MAX_TXT_LENGTH > 0) {
             anchorPane.setPrefHeight(anchorPane.getPrefHeight() * str.length() / MAX_TXT_LENGTH);
         }
         gridByte.add(anchorPane, 0, rowId++);
+    }
+
+    private void increaseScrollPaneSpeed(final ScrollPane customScrollPane){
+
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+        double vpHeight = bounds.getHeight();
+        double contentHeight = customScrollPane.getContent().getBoundsInLocal().getHeight();
+
+        double ratio = (vpHeight/contentHeight);
+
+        System.out.println(ratio);
+
+        final double[] MAX_VERTICAL = new double[1];
+        if (ratio>0.9){
+            MAX_VERTICAL[0] = 1;
+        }else if (ratio>0.7){
+            MAX_VERTICAL[0] = 2;
+        }else  {
+            MAX_VERTICAL[0] = 10;
+        }
+
+        final double SCROLL_SPEED = ratio;
+        customScrollPane.setVmax(MAX_VERTICAL[0]);
+        final double[] i = {0};
+        customScrollPane.addEventFilter(ScrollEvent.SCROLL,new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                if (event.getDeltaY() != 0) {
+                    boolean isScrollDown = event.getDeltaY()<0;
+                    event.consume();
+                    double newPos = i[0];
+                    if(isScrollDown){
+                        newPos += SCROLL_SPEED;
+                    }else{
+                        newPos -= SCROLL_SPEED;
+                    }
+                    newPos = newPos<0?0:newPos;
+                    newPos = newPos>MAX_VERTICAL[0]?MAX_VERTICAL[0]:newPos;
+                    i[0] = newPos;
+                    customScrollPane.setVvalue(newPos);
+
+                }
+            }
+        });
     }
 }
