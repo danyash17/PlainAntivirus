@@ -11,9 +11,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="824.0" style="-fx-background-color: linear-gradient(to right, #3a6186, #89253e);;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.desktopantivirus.PrimalController">
    <children>
-      <ScrollPane hbarPolicy="NEVER" layoutX="144.0" layoutY="80.0" prefHeight="460.0" prefWidth="666.0" style="-fx-background-color: #89253e;" vbarPolicy="NEVER">
+      <ScrollPane hbarPolicy="NEVER" layoutX="144.0" layoutY="80.0" prefHeight="366.0" prefWidth="666.0" style="-fx-background-color: #89253e;" vbarPolicy="NEVER">
          <content>
-            <GridPane fx:id="grid" prefHeight="458.0" prefWidth="665.0" style="-fx-background-color: linear-gradient(to right, #89253e, #3a6186);">
+            <GridPane fx:id="grid" prefHeight="382.0" prefWidth="666.0" style="-fx-background-color: linear-gradient(to right, #89253e, #3a6186);">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
@@ -25,6 +25,7 @@
             <Button fx:id="btnFindPe" layoutX="17.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="FIND PE" />
             <Button fx:id="btnManage" layoutX="17.0" layoutY="74.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="MANAGE" />
             <Button fx:id="btnVirusScan" layoutX="5.0" layoutY="384.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="107.0" style="-fx-text-fill: white; -fx-background-color: #3a6186;" text="VIRUS SCAN" />
+            <Button fx:id="btnClear" layoutX="17.0" layoutY="131.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="CLEAR" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="15.0" layoutY="32.0" prefHeight="48.0" prefWidth="794.0">
@@ -37,5 +38,14 @@
             </Text>
          </children>
       </AnchorPane>
+      <ScrollPane hbarPolicy="NEVER" layoutX="144.0" layoutY="462.0" prefHeight="78.0" prefWidth="666.0" style="-fx-background-color: #89253e;" vbarPolicy="NEVER">
+         <content>
+            <GridPane fx:id="gridByte" prefHeight="78.0" prefWidth="666.0" style="-fx-background-color: linear-gradient(to right, #89253e, #3a6186);">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

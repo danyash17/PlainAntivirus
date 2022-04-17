@@ -45,7 +45,7 @@ public class DatabaseConnectionWindowController implements Initializable {
                 if (!tables.next()) {
                     throw new NullPointerException();
                 }
-
+                byteManagerController.setConnection(con);
                 Stage stage = (Stage) btnEstablishConnection.getScene().getWindow();
                 byteManagerController.setTableName(txtTableName.getText().trim());
                 byteManagerController.setDbName(txtDbName.getText().trim());

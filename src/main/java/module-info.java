@@ -10,6 +10,7 @@ module com.example.desktopantivirus {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires org.apache.commons.lang3;
 
     opens com.example.desktopantivirus to javafx.fxml;
     exports com.example.desktopantivirus;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="464.0" prefWidth="312.0" style="-fx-background-color: linear-gradient(to right, #3a6186, #89253e);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.desktopantivirus.VirusWindowController">
+   <children>
+      <Text fill="RED" layoutX="60.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VIRUS DETECTED">
+         <font>
+            <Font name="Arial" size="22.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="imageviewVirus" fitHeight="51.0" fitWidth="57.0" layoutX="127.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fx:id="txtFile" fill="WHITE" layoutX="9.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="292.5367431640625" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="166.0" prefHeight="286.0" prefWidth="286.0" style="-fx-background-color: #89253e;" vbarPolicy="NEVER">
+         <content>
+            <GridPane fx:id="gridVirus" prefHeight="285.0" prefWidth="285.0" style="-fx-background-color: #3a6186;">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
+      <Text fill="WHITE" layoutX="10.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DETECTED BYTE SEQUENCES" textAlignment="CENTER" wrappingWidth="292.5367431640625" />
+   </children>
+</AnchorPane>

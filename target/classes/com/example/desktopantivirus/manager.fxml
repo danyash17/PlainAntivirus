@@ -16,11 +16,11 @@
          <children>
             <Button fx:id="btnAdd" layoutX="21.0" layoutY="72.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="ADD" />
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MALICIOUS BYTE SEQUENCE" textAlignment="CENTER" wrappingWidth="90.802734375" />
-            <Button fx:id="btnUpdate" layoutX="21.0" layoutY="120.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="UPDATE" />
-            <Button fx:id="btnDelete" layoutX="21.0" layoutY="170.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="DELETE" />
-            <Button fx:id="btnPull" layoutX="21.0" layoutY="403.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="PULL" />
-            <Button fx:id="btnPush" layoutX="21.0" layoutY="354.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="PUSH" />
-            <Text fill="WHITE" layoutX="14.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DATABASE SYNC" textAlignment="CENTER" wrappingWidth="90.802734375" />
+            <Button fx:id="btnPull" layoutX="21.0" layoutY="301.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="PULL" />
+            <Button fx:id="btnPush" layoutX="21.0" layoutY="252.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="PUSH" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DATABASE SYNC" textAlignment="CENTER" wrappingWidth="90.802734375" />
+            <Button fx:id="btnSubmit" layoutX="5.0" layoutY="384.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="107.0" style="-fx-text-fill: white; -fx-background-color: #3a6186;" text="SUBMIT" />
+            <Button fx:id="btnClear" layoutX="21.0" layoutY="123.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-background-color: linear-gradient(to right, #3a6186, #89253e);" text="CLEAR" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="15.0" layoutY="32.0" prefHeight="48.0" prefWidth="794.0">

@@ -1,6 +1,7 @@
 package com.example.desktopantivirus;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -9,6 +10,9 @@ import javafx.scene.text.Text;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -17,6 +21,7 @@ public class MiniFileController implements Initializable {
     public ImageView imageviewFile;
     public AnchorPane pane;
     public Text txtPath;
+    public CheckBox fileCheckBox;
     private File file;
     private static final int MAX_TXT_LENGTH = 80;
 
@@ -31,7 +36,7 @@ public class MiniFileController implements Initializable {
         });
     }
 
-    public void setData(File file) {
+    public void setData(File file, Map<File, CheckBox> fileMap) {
         String path = file.getPath();
         switch (path.substring(path.lastIndexOf("."))) {
             case ".exe": {
@@ -48,6 +53,7 @@ public class MiniFileController implements Initializable {
         fitText(txtFile, file.getName());
         fitText(txtPath, path);
         this.file = file;
+        fileMap.put(file,fileCheckBox);
     }
 
     private void fitText(Text text, String value) {
@@ -58,5 +64,29 @@ public class MiniFileController implements Initializable {
         } else {
             text.setText(value);
         }
+    }
+
+    public AnchorPane getPane() {
+        return pane;
+    }
+
+    public void setPane(AnchorPane pane) {
+        this.pane = pane;
+    }
+
+    public ImageView getImageviewFile() {
+        return imageviewFile;
+    }
+
+    public void setImageviewFile(ImageView imageviewFile) {
+        this.imageviewFile = imageviewFile;
+    }
+
+    public Text getTxtFile() {
+        return txtFile;
+    }
+
+    public void setTxtFile(Text txtFile) {
+        this.txtFile = txtFile;
     }
 }

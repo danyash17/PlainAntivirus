@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="666.0" prefHeight="19.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.desktopantivirus.MiniFileController">
+   <children>
+      <Text fx:id="txtFile" fill="WHITE" layoutX="23.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File name" wrappingWidth="186.0" />
+      <ImageView fx:id="imageviewFile" fitHeight="19.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fx:id="txtPath" fill="WHITE" layoutX="201.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="430.9365692138672" />
+      <CheckBox fx:id="fileCheckBox" layoutX="641.0" mnemonicParsing="false" />
+   </children>
+</AnchorPane>
