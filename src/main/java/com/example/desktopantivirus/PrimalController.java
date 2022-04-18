@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -58,8 +57,6 @@ public class PrimalController implements Initializable {
     private static final int MAX_TXT_LENGTH = 68;
     private static final long PE_OFFSET = 0x3c;
     private static int rowId = 0;
-
-
 
     private List<List<Byte>> maliciousBytes = new LinkedList<>();
     private Map<List<Byte>, CheckBox> maliciousBytesViewMap = new HashMap<>();
@@ -140,8 +137,8 @@ public class PrimalController implements Initializable {
     private void openVirusWindow(Event event) {
         String text = ((Text) event.getSource()).getText();
         File file = null;
-        for (File fileIter:files) {
-            if(fileIter.getName().equals(text)){
+        for (File fileIter : files) {
+            if (fileIter.getName().equals(text)) {
                 file = fileIter;
                 break;
             }
@@ -174,10 +171,8 @@ public class PrimalController implements Initializable {
             fl = new FileInputStream(file);
             byte[] arr = new byte[(int) file.length()];
             fl.read(arr);
-            Byte[] byteObject = ArrayUtils.toObject(arr);
-            List<Byte> fileBytes = new ArrayList<>(List.of(byteObject));
             for (Map.Entry<List<Byte>, CheckBox> entry : maliciousBytesViewMap.entrySet()) {
-                if (hasByteSequence(fileBytes, entry.getKey())) {
+                if (hasByteSequence(arr, entry.getKey())) {
                     detectedViruses.add(entry.getKey());
                 }
             }
@@ -190,18 +185,15 @@ public class PrimalController implements Initializable {
         }
     }
 
-    private boolean hasByteSequence(List<Byte> fileBytes, List<Byte> maliciousBytes) {
-        if (!fileBytes.containsAll(maliciousBytes)) {
-            return false;
-        }
-        int[] indexes = IntStream.range(0, fileBytes.size())
-                .filter(i -> fileBytes.get(i).equals(maliciousBytes.get(0)))
+    private boolean hasByteSequence(byte[] fileBytes, List<Byte> maliciousBytes) {
+        int[] indexes = IntStream.range(0, fileBytes.length)
+                .filter(i -> fileBytes[i] == maliciousBytes.get(0))
                 .toArray();
         for (int index : indexes) {
             boolean noMatch = false;
             int k = index;
             for (int j = 0; j < maliciousBytes.size(); j++, k++) {
-                if (!fileBytes.get(k).equals(maliciousBytes.get(j))) {
+                if (!(fileBytes[k] == maliciousBytes.get(j))) {
                     noMatch = true;
                     break;
                 }
@@ -342,43 +334,43 @@ public class PrimalController implements Initializable {
         gridByte.add(anchorPane, 0, rowId++);
     }
 
-    private void increaseScrollPaneSpeed(final ScrollPane customScrollPane){
+    private void increaseScrollPaneSpeed(final ScrollPane customScrollPane) {
 
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         double vpHeight = bounds.getHeight();
         double contentHeight = customScrollPane.getContent().getBoundsInLocal().getHeight();
 
-        double ratio = (vpHeight/contentHeight);
+        double ratio = (vpHeight / contentHeight);
 
         System.out.println(ratio);
 
         final double[] MAX_VERTICAL = new double[1];
-        if (ratio>0.9){
+        if (ratio > 0.9) {
             MAX_VERTICAL[0] = 1;
-        }else if (ratio>0.7){
+        } else if (ratio > 0.7) {
             MAX_VERTICAL[0] = 2;
-        }else  {
+        } else {
             MAX_VERTICAL[0] = 10;
         }
 
         final double SCROLL_SPEED = ratio;
         customScrollPane.setVmax(MAX_VERTICAL[0]);
         final double[] i = {0};
-        customScrollPane.addEventFilter(ScrollEvent.SCROLL,new EventHandler<ScrollEvent>() {
+        customScrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
                 if (event.getDeltaY() != 0) {
-                    boolean isScrollDown = event.getDeltaY()<0;
+                    boolean isScrollDown = event.getDeltaY() < 0;
                     event.consume();
                     double newPos = i[0];
-                    if(isScrollDown){
+                    if (isScrollDown) {
                         newPos += SCROLL_SPEED;
-                    }else{
+                    } else {
                         newPos -= SCROLL_SPEED;
                     }
-                    newPos = newPos<0?0:newPos;
-                    newPos = newPos>MAX_VERTICAL[0]?MAX_VERTICAL[0]:newPos;
+                    newPos = newPos < 0 ? 0 : newPos;
+                    newPos = Math.min(newPos, MAX_VERTICAL[0]);
                     i[0] = newPos;
                     customScrollPane.setVvalue(newPos);
 
